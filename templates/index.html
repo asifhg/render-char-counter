@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Render Character Counter</title>
+</head>
+<body>
+    <h2>Character Counter</h2>
+
+    <textarea id="inputText" rows="8" cols="60" placeholder="Type text here"></textarea>
+
+    <br><br>
+
+    <button onclick="countCharacters()">Count Characters</button>
+
+    <br><br>
+
+    <label>Character Count:</label><br>
+    <input id="outputText" type="text" readonly>
+
+    <script>
+        async function countCharacters() {
+            const text = document.getElementById("inputText").value;
+            const output = document.getElementById("outputText");
+
+            output.value = "Working...";
+
+            try {
+                const response = await fetch("/count", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const result = await response.json();
+                output.value = result.count;
+            } catch (error) {
+                output.value = "Error";
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
